@@ -61,12 +61,14 @@ window.onload = function() {
     function addRow(){
         if(checkError()){
             var row = tbody.insertRow(0);
-            var cell1 = row.insertCell(0);
-            var cell2 = row.insertCell(1);
-            var cell3 = row.insertCell(2);
+            var cell = row.insertCell(0);
+            var cell1 = row.insertCell(1);
+            var cell2 = row.insertCell(2);
+            var cell3 = row.insertCell(3);
 
-            cell1.innerHTML = width.value;
-            cell2.innerHTML = height.value;
+            cell.innerHTML = width.value;
+            cell1.innerHTML = height.value;
+            cell2.innerHTML = diagonal.value;
             cell3.innerHTML = calculPPI();
         }
     }
