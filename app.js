@@ -49,7 +49,8 @@ window.onload = function() {
             p.classList.remove('hidden');
             diagonal.value = diagonal.value.replace(',', '.');
             surface = roundToTwo(calculWidth() * calculHeight());
-            p.innerHTML = "Informations de l'écran : <strong>" + calculWidth() + "</strong> cm x <strong>" + calculHeight() + "</strong> cm ( <strong>" + surface + "</strong> cm² ) à <strong>" + calculPPI() + "</strong> PPI";
+            sum = width.value * height.value;
+            p.innerHTML = "Informations de l'écran : <strong>" + calculWidth() + "</strong> cm x <strong>" + calculHeight() + "</strong> cm ( <strong>" + surface + "</strong> cm² ) à <strong>" + calculPPI() + "</strong> PPI soit <strong>" + numberWithCommas(sum) + "</strong> de pixels.";
         } else {
             p.classList.add('hidden');
         }
@@ -89,6 +90,10 @@ window.onload = function() {
     function calculWidth(){
         diagonalMetre = diagonalMetric();
         return roundToTwo(Math.sqrt(Math.pow(diagonalMetre, 2) / (1+1 / Math.pow((width.value / height.value), 2)))); // Longueur = √ ( ( Diagonale )² / ( 1 + 1 / Rp² ))s
+    }
+
+    function numberWithCommas(x) {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
     }
 
 
