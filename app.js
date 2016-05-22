@@ -68,10 +68,10 @@ window.onload = function() {
             var cell2 = row.insertCell(2);
             var cell3 = row.insertCell(3);
 
-            cell.innerHTML = width.value;
-            cell1.innerHTML = height.value;
-            cell2.innerHTML = diagonal.value;
-            cell3.innerHTML = calculPPI();
+            cell.innerHTML = width.value + " cm";
+            cell1.innerHTML = height.value + " cm";
+            cell2.innerHTML = diagonal.value + " cm";
+            cell3.innerHTML = calculPPI() + " PPI";
         }
     }
 
