@@ -7,6 +7,7 @@ window.onload = function() {
     var self = document.getElementById('self');
     var inputs = document.querySelectorAll('.input');
     var links = document.querySelectorAll('.list-group-item');
+    var devicePixelRatio = window.devicePixelRatio || 1;
 
 
     /**
@@ -134,8 +135,8 @@ window.onload = function() {
      * Display value for the current screen
      */
     function myScreen() {
-        width.value = screen.width;
-        height.value = screen.height;
+        width.value = screen.width * devicePixelRatio;
+        height.value = screen.height * devicePixelRatio;
         update();
     }
 
