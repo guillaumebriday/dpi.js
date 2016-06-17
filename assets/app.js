@@ -51,7 +51,7 @@ window.onload = function() {
             diagonal.value = diagonal.value.replace(',', '.');
             surface = roundToTwo(calculWidth() * calculHeight());
             sum = width.value * height.value;
-            p.innerHTML = "Informations de l'écran : <strong>" + calculWidth() + "</strong> cm x <strong>" + calculHeight() + "</strong> cm (<strong>" + surface + "</strong> cm²) à <strong>" + calculPPI() + "</strong> PPI soit <strong>" + numberWithCommas(sum) + "</strong> de pixels.";
+            p.innerHTML = "Informations de l'écran : <strong>" + calculWidth() + "</strong> cm x <strong>" + calculHeight() + "</strong> cm (<strong>" + surface + "</strong> cm²) à <strong>" + calculPPI() + "</strong> PPI soit <strong>" + numberWithCommas(sum) + "</strong> pixels.";
         } else {
             p.classList.add('hidden');
         }
