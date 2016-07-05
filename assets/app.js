@@ -15,27 +15,30 @@ window.onload = function() {
     /**
      * Create eventListener for each links and replace values
      */
-    for(var i=0;i<links.length;i++){
+    for (var i=0;i<links.length;i++) {
         link = links[i];
-        link.addEventListener('click', function(link){
+        link.addEventListener('click', function(link) {
             width.value = this.dataset.width;
             height.value = this.dataset.height;
+            if (this.dataset.diagonal) {
+                diagonal.value = this.dataset.diagonal;
+            }
             update();
         });
     }
 
-    remember.addEventListener('click', function(){
+    remember.addEventListener('click', function() {
         addRow();
     });
 
-    self.addEventListener('click', function(){
+    self.addEventListener('click', function() {
         myScreen();
     });
 
 
-    for(var i = 0; i < inputs.length; i++){
+    for (var i = 0; i < inputs.length; i++) {
         input = inputs[i];
-        input.addEventListener('input', function(){
+        input.addEventListener('input', function() {
             update();
         });
     }
@@ -43,16 +46,17 @@ window.onload = function() {
     /**
      *  Update and show if needed the result
      */
-    function update(){
+    function update() {
         var p = document.getElementById('result');
 
-        if(checkError()){
+        if (checkError()) {
             p.classList.remove('hidden');
             diagonal.value = diagonal.value.replace(',', '.');
             surface = roundToTwo(calculWidth() * calculHeight());
             sum = width.value * height.value;
-            p.innerHTML = "Informations de l'écran : <strong>" + calculWidth() + "</strong> cm x <strong>" + calculHeight() + "</strong> cm (<strong>" + surface + "</strong> cm²) à <strong>" + calculPPI() + "</strong> PPI soit <strong>" + numberWithCommas(sum) + "</strong> pixels.";
-        } else {
+            p.innerHTML = "Informations de l'écran : <strong>" + roundToTwo(calculWidth()) + "</strong> cm x <strong>" + roundToTwo(calculHeight()) + "</strong> cm (<strong>" + surface + "</strong> cm²) à <strong>" + roundToTwo(calculPPI()) + "</strong> PPI soit <strong>" + numberWithCommas(sum) + "</strong> pixels. Retina à partir de <strong>" + roundToTwo(calcViewDistance() * 2.54) + "</strong> cm.";
+        }
+        else {
             p.classList.add('hidden');
         }
     }
@@ -60,8 +64,8 @@ window.onload = function() {
     /**
      * Add row to the table
      */
-    function addRow(){
-        if(checkError()){
+    function addRow() {
+        if (checkError()) {
             var row = tbody.insertRow(0);
             var cell = row.insertCell(0);
             var cell1 = row.insertCell(1);
@@ -71,34 +75,33 @@ window.onload = function() {
             cell.innerHTML = width.value;
             cell1.innerHTML = height.value;
             cell2.innerHTML = diagonal.value;
-            cell3.innerHTML = calculPPI();
+            cell3.innerHTML = roundToTwo(calculPPI());
 
             sort.refresh();
         }
     }
 
-    function calculPPI(){
-        return roundToTwo((height.value/Math.sqrt(Math.pow(diagonal.value,2)/(Math.pow((width.value/height.value),2)+1))));
+    function calculPPI() {
+        return (height.value/Math.sqrt(Math.pow(diagonal.value,2)/(Math.pow((width.value/height.value),2)+1)));
     }
 
-    function diagonalMetric(){
-        return roundToTwo((diagonal.value * 2.54));
+    function calculHeight() {
+        diagonalMetre = inchToCm(diagonal.value);
+        return Math.sqrt(Math.pow(diagonalMetre, 2) / (Math.pow((width.value / height.value), 2) + 1 )); // Hauteur = √ ( ( Diagonale )²/ ( Rp² + 1 ) )
     }
 
-    function calculHeight(){
-        diagonalMetre = diagonalMetric();
-        return roundToTwo(Math.sqrt(Math.pow(diagonalMetre, 2) / (Math.pow((width.value / height.value), 2) + 1 ))); // Hauteur = √ ( ( Diagonale )²/ ( Rp² + 1 ) )
-    }
-
-    function calculWidth(){
-        diagonalMetre = diagonalMetric();
-        return roundToTwo(Math.sqrt(Math.pow(diagonalMetre, 2) / (1+1 / Math.pow((width.value / height.value), 2)))); // Longueur = √ ( ( Diagonale )² / ( 1 + 1 / Rp² ))s
+    function calculWidth() {
+        diagonalMetre = inchToCm(diagonal.value);
+        return Math.sqrt(Math.pow(diagonalMetre, 2) / (1+1 / Math.pow((width.value / height.value), 2))); // Longueur = √ ( ( Diagonale )² / ( 1 + 1 / Rp² ))s
     }
 
     function numberWithCommas(x) {
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
     }
 
+    function calcViewDistance() {
+        return 3438 / (Math.sqrt((Math.pow(width.value,2)+Math.pow(height.value,2)))/diagonal.value);;
+    }
 
     /**
      * Check if inputs are valid values and add class error if needed
@@ -106,21 +109,21 @@ window.onload = function() {
      */
     function checkError(){
 
-        if(width.value != "" && !isNaN(width.value)){
+        if (width.value != "" && !isNaN(width.value)) {
             width.parentElement.classList.remove('has-error');
         }
         else {
             width.parentElement.classList.add('has-error');
         }
 
-        if(height.value != "" && !isNaN(height.value)){
+        if (height.value != "" && !isNaN(height.value)) {
             height.parentElement.classList.remove('has-error');
         }
         else {
             height.parentElement.classList.add('has-error');
         }
 
-        if(diagonal.value != "" && !isNaN(diagonal.value)){
+        if (diagonal.value != "" && !isNaN(diagonal.value)) {
             diagonal.parentElement.classList.remove('has-error');
         }
         else {
@@ -146,4 +149,7 @@ window.onload = function() {
         return +(Math.round(num + "e+2")  + "e-2");
     }
 
+    function inchToCm(value) {
+        return (value * 2.54);
+    }
 }
