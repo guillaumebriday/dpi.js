@@ -18,6 +18,11 @@ window.onload = function() {
     for (var i=0;i<links.length;i++) {
         link = links[i];
         link.addEventListener('click', function(link) {
+            for (var j=0;j<links.length;j++) {
+                link = links[j];
+                link.classList.remove('active');
+            }
+            this.classList.add('active');
             width.value = this.dataset.width;
             height.value = this.dataset.height;
             if (this.dataset.diagonal) {
