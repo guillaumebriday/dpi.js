@@ -76,11 +76,15 @@ window.onload = function() {
             var cell1 = row.insertCell(1);
             var cell2 = row.insertCell(2);
             var cell3 = row.insertCell(3);
+            var cell4 = row.insertCell(4);
+            var cell5 = row.insertCell(5);
 
-            cell.innerHTML = width.value;
-            cell1.innerHTML = height.value;
-            cell2.innerHTML = diagonal.value;
-            cell3.innerHTML = roundToTwo(calculPPI());
+            cell.innerHTML = width.value + " px";
+            cell1.innerHTML = height.value + " px";
+            cell2.innerHTML = diagonal.value + "\"";
+            cell3.innerHTML = roundToTwo(calculPPI()) + " PPI";
+            cell4.innerHTML = numberWithCommas(width.value * height.value);
+            cell5.innerHTML = roundToTwo(roundToTwo(calcViewDistance() * 2.54)) + " cm";
 
             sort.refresh();
         }
