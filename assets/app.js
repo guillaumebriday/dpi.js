@@ -56,10 +56,8 @@ window.onload = function() {
 
         if (checkError()) {
             p.classList.remove('hidden');
-            diagonal.value = diagonal.value.replace(',', '.');
-            surface = roundToTwo(getScreenWidth() * getScreenHeight());
-            sum = width.value * height.value;
-            p.innerHTML = "Informations de l'écran : <strong>" + roundToTwo(getScreenWidth()) + "</strong> cm x <strong>" + roundToTwo(getScreenHeight()) + "</strong> cm (<strong>" + surface + "</strong> cm²) à <strong>" + roundToTwo(getScreenPPI()) + "</strong> PPI soit <strong>" + numberWithCommas(sum) + "</strong> pixels. Retina à partir de <strong>" + roundToTwo(getViewDistance() * 2.54) + "</strong> cm.";
+            var info = getInfo();
+            p.innerHTML = "Informations de l'écran : <strong>" + info.width + "</strong> cm x <strong>" + info.height + "</strong> cm (<strong>" + info.surface + "</strong> cm²) à <strong>" + info.ppi + "</strong> PPI soit <strong>" + info.pixels + "</strong> pixels. Retina à partir de <strong>" + info.viewDistance + "</strong> cm.";
         }
         else {
             p.classList.add('hidden');
@@ -71,6 +69,7 @@ window.onload = function() {
      */
     function addRow() {
         if (checkError()) {
+            var info = getInfo();
             var row = tbody.insertRow(0);
             var cell = row.insertCell(0);
             var cell1 = row.insertCell(1);
@@ -81,13 +80,25 @@ window.onload = function() {
 
             cell.innerHTML = width.value + " px";
             cell1.innerHTML = height.value + " px";
-            cell2.innerHTML = diagonal.value + "\"";
-            cell3.innerHTML = roundToTwo(getScreenPPI()) + " PPI";
-            cell4.innerHTML = numberWithCommas(width.value * height.value);
-            cell5.innerHTML = roundToTwo(roundToTwo(getViewDistance() * 2.54)) + " cm";
+            cell2.innerHTML = info.diagonal + "\"";
+            cell3.innerHTML = info.ppi + " PPI";
+            cell4.innerHTML = info.pixels;
+            cell5.innerHTML = info.viewDistance + " cm";
 
             sort.refresh();
         }
+    }
+
+    function getInfo() {
+        return {
+            width: roundToTwo(getScreenWidth()),
+            height: roundToTwo(getScreenHeight()),
+            diagonal: diagonal.value,
+            surface: roundToTwo(getScreenWidth() * getScreenHeight()),
+            ppi: roundToTwo(getScreenPPI()),
+            pixels: numberWithSpaces(width.value * height.value),
+            viewDistance: roundToTwo(inchToCm(getViewDistance()))
+        };
     }
 
     /**
