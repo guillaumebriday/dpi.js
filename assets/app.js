@@ -57,9 +57,9 @@ window.onload = function() {
         if (checkError()) {
             p.classList.remove('hidden');
             diagonal.value = diagonal.value.replace(',', '.');
-            surface = roundToTwo(calculWidth() * calculHeight());
+            surface = roundToTwo(getScreenWidth() * getScreenHeight());
             sum = width.value * height.value;
-            p.innerHTML = "Informations de l'écran : <strong>" + roundToTwo(calculWidth()) + "</strong> cm x <strong>" + roundToTwo(calculHeight()) + "</strong> cm (<strong>" + surface + "</strong> cm²) à <strong>" + roundToTwo(calculPPI()) + "</strong> PPI soit <strong>" + numberWithCommas(sum) + "</strong> pixels. Retina à partir de <strong>" + roundToTwo(calcViewDistance() * 2.54) + "</strong> cm.";
+            p.innerHTML = "Informations de l'écran : <strong>" + roundToTwo(getScreenWidth()) + "</strong> cm x <strong>" + roundToTwo(getScreenHeight()) + "</strong> cm (<strong>" + surface + "</strong> cm²) à <strong>" + roundToTwo(getScreenPPI()) + "</strong> PPI soit <strong>" + numberWithCommas(sum) + "</strong> pixels. Retina à partir de <strong>" + roundToTwo(getViewDistance() * 2.54) + "</strong> cm.";
         }
         else {
             p.classList.add('hidden');
@@ -82,34 +82,12 @@ window.onload = function() {
             cell.innerHTML = width.value + " px";
             cell1.innerHTML = height.value + " px";
             cell2.innerHTML = diagonal.value + "\"";
-            cell3.innerHTML = roundToTwo(calculPPI()) + " PPI";
+            cell3.innerHTML = roundToTwo(getScreenPPI()) + " PPI";
             cell4.innerHTML = numberWithCommas(width.value * height.value);
-            cell5.innerHTML = roundToTwo(roundToTwo(calcViewDistance() * 2.54)) + " cm";
+            cell5.innerHTML = roundToTwo(roundToTwo(getViewDistance() * 2.54)) + " cm";
 
             sort.refresh();
         }
-    }
-
-    function calculPPI() {
-        return (height.value/Math.sqrt(Math.pow(diagonal.value,2)/(Math.pow((width.value/height.value),2)+1)));
-    }
-
-    function calculHeight() {
-        diagonalMetre = inchToCm(diagonal.value);
-        return Math.sqrt(Math.pow(diagonalMetre, 2) / (Math.pow((width.value / height.value), 2) + 1 )); // Hauteur = √ ( ( Diagonale )²/ ( Rp² + 1 ) )
-    }
-
-    function calculWidth() {
-        diagonalMetre = inchToCm(diagonal.value);
-        return Math.sqrt(Math.pow(diagonalMetre, 2) / (1+1 / Math.pow((width.value / height.value), 2))); // Longueur = √ ( ( Diagonale )² / ( 1 + 1 / Rp² ))s
-    }
-
-    function numberWithCommas(x) {
-        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
-    }
-
-    function calcViewDistance() {
-        return 3438 / (Math.sqrt((Math.pow(width.value,2)+Math.pow(height.value,2)))/diagonal.value);;
     }
 
     /**
@@ -154,11 +132,42 @@ window.onload = function() {
         update();
     }
 
+    function getScreenWidth() {
+        // Width = √ (( Diagonale )² / ( 1 + 1 / Rp² ))
+        return Math.sqrt(Math.pow(getMetricDiagonal(), 2) / (1 + 1 / Math.pow((getRatio()), 2)));
+    }
+
+    function getScreenHeight() {
+        // Height = √ (( Diagonale )²/ ( Rp² + 1 ))
+        return Math.sqrt(Math.pow(getMetricDiagonal(), 2) / (Math.pow((getRatio()), 2) + 1 ));
+    }
+
+    function getScreenPPI() {
+        // resolution = √ (( width )² + ( height )²) / diagonal
+        return (Math.sqrt((Math.pow(width.value, 2) + Math.pow(height.value, 2))) / diagonal.value);
+    }
+
+    function getViewDistance() {
+        return 3438 / getScreenPPI();
+    }
+
+    function getRatio() {
+        return (width.value / height.value);
+    }
+
+    function getMetricDiagonal() {
+        return inchToCm(diagonal.value);
+    }
+
     function roundToTwo(num) {
         return +(Math.round(num + "e+2")  + "e-2");
     }
 
     function inchToCm(value) {
         return (value * 2.54);
+    }
+
+    function numberWithCommas(x) {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
     }
 }
