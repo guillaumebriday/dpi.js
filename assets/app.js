@@ -54,7 +54,7 @@ window.onload = function() {
     function update() {
         var p = document.getElementById('result');
 
-        if (checkError()) {
+        if (!hasErrors()) {
             p.classList.remove('hidden');
             var info = getInfo();
             p.innerHTML = "Informations de l'écran : <strong>" + info.width + "</strong> cm x <strong>" + info.height + "</strong> cm (<strong>" + info.surface + "</strong> cm²) à <strong>" + info.ppi + "</strong> PPI soit <strong>" + info.pixels + "</strong> pixels. Retina à partir de <strong>" + info.viewDistance + "</strong> cm.";
@@ -68,7 +68,7 @@ window.onload = function() {
      * Add row to the table
      */
     function addRow() {
-        if (checkError()) {
+        if (!hasErrors()) {
             var info = getInfo();
             var row = tbody.insertRow(0);
             var cell = row.insertCell(0);
@@ -105,7 +105,7 @@ window.onload = function() {
      * Check if inputs are valid values and add class error if needed
      * @return boolean
      */
-    function checkError(){
+    function hasErrors(){
 
         if (width.value != "" && !isNaN(width.value)) {
             width.parentElement.classList.remove('has-error');
@@ -129,9 +129,9 @@ window.onload = function() {
         }
 
         if(width.value != "" && height.value != "" && diagonal.value != "" && !isNaN(width.value) && !isNaN(height.value) && !isNaN(diagonal.value)){
-            return true;
+            return false;
         }
-        return false;
+        return true;
     }
 
     /**
