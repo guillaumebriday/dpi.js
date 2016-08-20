@@ -107,21 +107,21 @@ window.onload = function() {
      */
     function hasErrors(){
 
-        if (width.value != "" && !isNaN(width.value)) {
+        if (isCorrectNumber(width.value)) {
             width.parentElement.classList.remove('has-error');
         }
         else {
             width.parentElement.classList.add('has-error');
         }
 
-        if (height.value != "" && !isNaN(height.value)) {
+        if (isCorrectNumber(height.value)) {
             height.parentElement.classList.remove('has-error');
         }
         else {
             height.parentElement.classList.add('has-error');
         }
 
-        if (diagonal.value != "" && !isNaN(diagonal.value)) {
+        if (isCorrectNumber(diagonal.value)) {
             diagonal.parentElement.classList.remove('has-error');
         }
         else {
@@ -132,6 +132,10 @@ window.onload = function() {
             return false;
         }
         return true;
+    }
+
+    function isCorrectNumber(number) {
+        return (!isNaN(number) && number !== '' && number > 0);
     }
 
     /**
