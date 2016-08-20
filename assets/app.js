@@ -167,7 +167,7 @@ window.onload = function() {
         return (value * 2.54);
     }
 
-    function numberWithCommas(x) {
+    function numberWithSpaces(x) {
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
     }
 }
